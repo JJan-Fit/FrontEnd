@@ -1,21 +1,26 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import { useModal } from '../../context/ModalContext.jsx';
 import { fmtTime } from '../../utils/date.js';
 import { findById } from '../../utils/id.js';
-import { fromComma, toComma } from '../../utils/format.js';
+import { fmtKRWShort, fromComma, toComma } from '../../utils/format.js';
 import TypeChips from '../common/TypeChips.jsx';
+import QuickAmount from '../common/QuickAmount.jsx';
 
 /**
  * 수입 / 지출 추가 · 수정 모달.
  *
- * - kind 가 'income' 이면 incomeTypes 를, 'expense' 면 expenseTypes 를 사용한다.
- * - existingId 가 있으면 수정 모드 — 기존 기록을 폼에 채워서 시작.
+ * UX 디자인 원칙:
+ *  - 모달이 뜨면 가장 자주 쓰는 입력(금액)에 자동 포커스 → 모바일 키보드가 즉시 떠서 타이핑 시작 가능
+ *  - +1천 / +1만 / +10만 등 빠른 버튼으로 금액 누적 입력 (가계부 앱 표준)
+ *  - 큰 글자로 현재 금액 미리보기 표시
+ *  - 종류 선택 → 금액 입력 흐름 직관적
+ *  - 어디서든 Enter 누르면 저장 (조건 충족 시)
  *
  * @param {{
  *   kind: 'income' | 'expense',
- *   defaultDate: string,            // selectedDate 등
+ *   defaultDate: string,
  *   existingId?: string | null,
  * }} props
  */
@@ -28,7 +33,6 @@ export default function MoneyModal({ kind, defaultDate, existingId = null }) {
   const typesKey = kind === 'income' ? 'incomeTypes' : 'expenseTypes';
   const types = state[typesKey];
 
-  // 수정 시 기존 기록 추출 (한 번만)
   const existing = useMemo(
     () => (existingId ? findById(state.records, existingId) : null),
     [existingId, state.records]
@@ -42,7 +46,19 @@ export default function MoneyModal({ kind, defaultDate, existingId = null }) {
     existing?.amount ? Number(existing.amount).toLocaleString('ko-KR') : ''
   );
 
-  // 종류가 삭제되어 selectedTypeId 가 더이상 유효하지 않으면 자동 해제
+  // 새 항목 추가 폼 (인라인 — prompt 대신)
+  const [showAddType, setShowAddType] = useState(false);
+  const [newTypeName, setNewTypeName] = useState('');
+
+  // 금액 인풋 ref — 모달 진입 시 자동 포커스
+  const amountRef = useRef(null);
+  useEffect(() => {
+    // 모달 슬라이드 업 트랜지션과 겹치지 않게 약간 지연 후 포커스
+    const t = setTimeout(() => amountRef.current?.focus(), 320);
+    return () => clearTimeout(t);
+  }, []);
+
+  // 종류가 삭제되면 자동으로 선택 해제
   useEffect(() => {
     if (selectedTypeId && !types.some((t) => t.id === selectedTypeId)) {
       setSelectedTypeId(null);
@@ -52,13 +68,28 @@ export default function MoneyModal({ kind, defaultDate, existingId = null }) {
   const amount = fromComma(amountStr);
   const canSave = !!selectedTypeId && amount > 0;
 
-  /* ---------- 종류 추가/삭제 (모달 안에서) ---------- */
-  const handleAddType = () => {
-    const nm = prompt(`${kind === 'income' ? '수입' : '지출'} 종류 이름을 입력하세요`);
-    if (nm && nm.trim()) {
-      actions.addType(typesKey, nm.trim());
-      toast('종류 추가됨');
-    }
+  /* ---------- 빠른 금액 버튼 ---------- */
+  const handleQuickAdd = (delta) => {
+    setAmountStr(toComma(amount + delta));
+  };
+  const handleClearAmount = () => setAmountStr('');
+
+  /* ---------- 종류 인라인 추가 ---------- */
+  const handleOpenAddType = () => {
+    setShowAddType(true);
+    setNewTypeName('');
+  };
+  const handleConfirmAddType = () => {
+    const nm = newTypeName.trim();
+    if (!nm) return;
+    actions.addType(typesKey, nm);
+    setShowAddType(false);
+    setNewTypeName('');
+    toast('종류 추가됨');
+  };
+  const handleCancelAddType = () => {
+    setShowAddType(false);
+    setNewTypeName('');
   };
 
   const handleDeleteType = (id) => {
@@ -84,6 +115,14 @@ export default function MoneyModal({ kind, defaultDate, existingId = null }) {
     closeModal();
   };
 
+  /** 폼 어디서든 Enter 누르면 저장 (저장 가능 상태일 때만) */
+  const handleFormKeyDown = (e) => {
+    if (e.key === 'Enter' && canSave && !showAddType) {
+      e.preventDefault();
+      handleSave();
+    }
+  };
+
   const emoji = kind === 'income' ? '💰' : '💳';
   const colorCls = kind === 'income' ? 'in' : 'out';
   const title = isEdit
@@ -95,12 +134,90 @@ export default function MoneyModal({ kind, defaultDate, existingId = null }) {
     : '지출 추가';
 
   return (
-    <>
+    <div onKeyDown={handleFormKeyDown}>
       <h3>
         <span className="em">{emoji}</span>
         {title}
       </h3>
 
+      {/* 큰 금액 미리보기 — 입력 중인 값이 시각적으로 즉시 보이게 */}
+      <div className={`amount-preview ${colorCls}`}>
+        <span className="sign">{kind === 'income' ? '+' : '−'}</span>
+        <span className="value">{amountStr || '0'}</span>
+        <span className="unit">원</span>
+        {amount > 0 && (
+          <span className="hint">{fmtKRWShort(amount).replace('₩', '')}</span>
+        )}
+      </div>
+
+      {/* 금액 입력 */}
+      <div className="field">
+        <label>금액</label>
+        <input
+          ref={amountRef}
+          type="text"
+          inputMode="numeric"
+          autoComplete="off"
+          placeholder="0"
+          value={amountStr}
+          onChange={(e) => setAmountStr(toComma(e.target.value))}
+          className="amount-input"
+        />
+        <QuickAmount onAdd={handleQuickAdd} onClear={handleClearAmount} />
+      </div>
+
+      {/* 종류 선택 */}
+      <div className="field">
+        <label>
+          종류{' '}
+          <span style={{ fontWeight: 500, color: 'var(--ink-3)' }}>
+            (길게 눌러 삭제)
+          </span>
+        </label>
+        <TypeChips
+          items={types}
+          selectedId={selectedTypeId}
+          onSelect={setSelectedTypeId}
+          onAdd={handleOpenAddType}
+          onDelete={handleDeleteType}
+        />
+        {showAddType && (
+          <div className="inline-add">
+            <input
+              autoFocus
+              placeholder={`새 ${kind === 'income' ? '수입' : '지출'} 종류 이름`}
+              value={newTypeName}
+              onChange={(e) => setNewTypeName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleConfirmAddType();
+                } else if (e.key === 'Escape') {
+                  handleCancelAddType();
+                }
+              }}
+              maxLength={20}
+            />
+            <button
+              type="button"
+              className="inline-add-confirm"
+              onClick={handleConfirmAddType}
+              disabled={!newTypeName.trim()}
+            >
+              추가
+            </button>
+            <button
+              type="button"
+              className="inline-add-cancel"
+              onClick={handleCancelAddType}
+            >
+              ×
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* 날짜·시간 — 자주 변경하지 않으므로 아래쪽 */}
       <div className="field row">
         <div className="col">
           <label>날짜</label>
@@ -110,32 +227,6 @@ export default function MoneyModal({ kind, defaultDate, existingId = null }) {
           <label>시간</label>
           <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
         </div>
-      </div>
-
-      <div className="field">
-        <label>
-          종류{' '}
-          <span style={{ fontWeight: 500, color: 'var(--ink-3)' }}>(길게 눌러 삭제)</span>
-        </label>
-        <TypeChips
-          items={types}
-          selectedId={selectedTypeId}
-          onSelect={setSelectedTypeId}
-          onAdd={handleAddType}
-          onDelete={handleDeleteType}
-        />
-      </div>
-
-      <div className="field">
-        <label>금액 (원)</label>
-        <input
-          type="text"
-          inputMode="numeric"
-          autoComplete="off"
-          placeholder="0"
-          value={amountStr}
-          onChange={(e) => setAmountStr(toComma(e.target.value))}
-        />
       </div>
 
       <button
@@ -148,6 +239,6 @@ export default function MoneyModal({ kind, defaultDate, existingId = null }) {
       <button className="secondary-btn" onClick={closeModal}>
         취소
       </button>
-    </>
+    </div>
   );
 }

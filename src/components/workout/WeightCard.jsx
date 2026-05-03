@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import { todayStr } from '../../utils/date.js';
 import WeightChart from './WeightChart.jsx';
+import NumberStepper from '../common/NumberStepper.jsx';
 
 /**
  * 오늘의 몸무게를 입력하고, 일자별 트렌드를 보여주는 카드.
@@ -104,20 +105,21 @@ export default function WeightCard() {
         <div className="stat-now">{statBlock}</div>
       </div>
 
-      <div className="input-row">
-        <input
-          type="number"
-          step="0.1"
+      {/*
+        몸무게는 0.1kg 단위로 미세 조정하므로 +/- 스텝이 매우 유용.
+        직전 값을 모르고 시작할 수 있으므로 placeholder 에 안내만 두고 비워둔 채로 시작.
+      */}
+      <div className="input-row stepper-row">
+        <NumberStepper
+          value={inputValue}
+          onChange={setInputValue}
+          step={0.1}
+          min={0}
+          max={500}
           inputMode="decimal"
           placeholder="예: 72.5"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              handleSave();
-            }
-          }}
+          ariaLabel="오늘 몸무게"
+          onEnter={handleSave}
         />
         <div className="unit">kg</div>
         <button onClick={handleSave}>저장</button>

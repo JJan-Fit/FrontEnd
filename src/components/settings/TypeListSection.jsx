@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import { findById } from '../../utils/id.js';
+import InlineEdit from '../common/InlineEdit.jsx';
 
 /**
  * 수입/지출 종류를 관리하는 리스트 섹션.
  *
- * - 항목 좌측 점은 수입/지출 색상 (settings 색상)
- * - 이름 수정 / 삭제 / 새 항목 추가
+ * UX:
+ *  - ✎ 버튼 또는 이름 클릭 → 그 자리에서 인라인 편집 (prompt 사용 X)
+ *  - Enter 로 저장, Esc 로 취소, 포커스 잃어도 자동 저장
+ *  - Enter 로 새 항목 추가
  *
  * @param {{
  *   storeKey: 'incomeTypes' | 'expenseTypes',
@@ -21,6 +24,7 @@ export default function TypeListSection({ storeKey, title, emoji, dotColor, plac
   const { state, actions } = useApp();
   const toast = useToast();
   const [draft, setDraft] = useState('');
+  const [editingId, setEditingId] = useState(null); // 현재 편집 중인 항목 id
 
   const items = state[storeKey];
 
@@ -32,14 +36,9 @@ export default function TypeListSection({ storeKey, title, emoji, dotColor, plac
     toast('추가됨');
   };
 
-  const handleRename = (id) => {
-    const t = findById(items, id);
-    if (!t) return;
-    const nm = prompt('새 이름', t.name);
-    if (nm && nm.trim()) {
-      actions.renameType(storeKey, id, nm.trim());
-      toast('이름 수정됨');
-    }
+  const handleRename = (id, nextName) => {
+    actions.renameType(storeKey, id, nextName);
+    toast('이름 수정됨');
   };
 
   const handleDelete = (id) => {
@@ -57,20 +56,41 @@ export default function TypeListSection({ storeKey, title, emoji, dotColor, plac
       </div>
 
       <div className="list">
-        {items.map((t) => (
-          <div className="item" key={t.id}>
-            <span className="dot" style={{ background: dotColor }} />
-            <div className="nm">{t.name}</div>
-            <div className="item-actions">
-              <button className="edit" title="이름 수정" onClick={() => handleRename(t.id)}>
-                ✎
-              </button>
-              <button className="del" title="삭제" onClick={() => handleDelete(t.id)}>
-                ×
-              </button>
+        {items.map((t) => {
+          const isEditing = editingId === t.id;
+          return (
+            <div className="item" key={t.id}>
+              <span className="dot" style={{ background: dotColor }} />
+              <div
+                className="nm editable-nm"
+                onClick={() => !isEditing && setEditingId(t.id)}
+                title="클릭해서 이름 수정"
+              >
+                {findById(items, t.id) && (
+                  <InlineEdit
+                    value={t.name}
+                    editing={isEditing}
+                    onEditingChange={(b) => setEditingId(b ? t.id : null)}
+                    onSave={(nm) => handleRename(t.id, nm)}
+                    placeholder="이름 입력"
+                  />
+                )}
+              </div>
+              <div className="item-actions">
+                <button
+                  className="edit"
+                  title="이름 수정"
+                  onClick={() => setEditingId(isEditing ? null : t.id)}
+                >
+                  ✎
+                </button>
+                <button className="del" title="삭제" onClick={() => handleDelete(t.id)}>
+                  ×
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="add-row">
@@ -79,8 +99,11 @@ export default function TypeListSection({ storeKey, title, emoji, dotColor, plac
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          maxLength={20}
         />
-        <button onClick={handleAdd}>추가</button>
+        <button onClick={handleAdd} disabled={!draft.trim()}>
+          추가
+        </button>
       </div>
     </div>
   );

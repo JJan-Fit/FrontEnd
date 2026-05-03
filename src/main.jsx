@@ -5,11 +5,16 @@ import { AppProvider } from './context/AppContext.jsx';
 import { ToastProvider } from './context/ToastContext.jsx';
 import { ModalProvider } from './context/ModalContext.jsx';
 
-// 전역 스타일 (변수 → 베이스 → 컴포넌트 → 애니메이션 순서로 임포트)
-// 애니메이션은 마지막에 로드해 hover/transition 등 인터랙션 규칙이 우선 적용되도록 함
+// 전역 스타일 — 로드 순서가 곧 cascade 우선순위
+//   variables  : 색상/사이즈 토큰
+//   base       : 리셋 + 레이아웃 (헤더/탭바/모달 뼈대)
+//   components : 각 뷰 / 카드 컴포넌트
+//   inputs     : InlineEdit / NumberStepper / QuickAmount 등 입력 보조
+//   animations : 애니메이션·hover 효과 (가장 마지막 — override)
 import './styles/variables.css';
 import './styles/base.css';
 import './styles/components.css';
+import './styles/inputs.css';
 import './styles/animations.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

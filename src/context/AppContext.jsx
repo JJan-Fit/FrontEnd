@@ -112,6 +112,19 @@ export function AppProvider({ children }) {
     [setState]
   );
 
+  /** 카테고리 색상 변경 — 설정에서 컬러피커로 즉시 변경 */
+  const setWorkoutCatColor = useCallback(
+    (catId, color) => {
+      setState((s) => ({
+        ...s,
+        workoutCats: s.workoutCats.map((c) =>
+          c.id === catId ? { ...c, color } : c
+        ),
+      }));
+    },
+    [setState]
+  );
+
   const deleteWorkoutCat = useCallback(
     (catId) => {
       setState((s) => ({
@@ -199,6 +212,7 @@ export function AppProvider({ children }) {
       deleteType,
       addWorkoutCat,
       renameWorkoutCat,
+      setWorkoutCatColor,
       deleteWorkoutCat,
       addExercise,
       renameExercise,
@@ -216,6 +230,7 @@ export function AppProvider({ children }) {
       deleteType,
       addWorkoutCat,
       renameWorkoutCat,
+      setWorkoutCatColor,
       deleteWorkoutCat,
       addExercise,
       renameExercise,
