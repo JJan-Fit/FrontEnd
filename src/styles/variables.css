@@ -1,0 +1,79 @@
+/* =======================================================
+   짠핏 — 디자인 토큰
+   라이트/다크 테마 구분 없이 공유되는 색상은 :root 에,
+   다크 테마 전용 오버라이드는 html[data-theme="dark"] 에 둔다.
+   ======================================================= */
+:root {
+  /* 브랜드/포인트 */
+  --blue-1: #6b9bd1;
+  --blue-2: #4a7fb8;
+  --mint: #a8dadc;
+  --lavender: #c8b8e0;
+  --cream: #fff6e9;
+  --yellow: #ffd966;
+  --coral: #ff8b94;
+
+  /* 수입/지출 메인 */
+  --income: #4a7fb8;
+  --income-soft: #e1ecf7;
+  --expense: #e14b6a;
+  --expense-soft: #fce0e5;
+
+  /* 운동 카테고리 기본 팔레트 */
+  --chest: #ffb4b4;
+  --back: #a3c9e8;
+  --legs: #ffd88b;
+
+  --custom-1: #c7b3e8;
+  --custom-2: #9fe4c4;
+  --custom-3: #f4b8d6;
+  --custom-4: #ffcba4;
+
+  /* 텍스트 */
+  --ink: #2d3142;
+  --ink-2: #5a5f72;
+  --ink-3: #8a8fa3;
+
+  /* 표면/구분선 */
+  --line: #e6e8f0;
+  --bg: #f3f1fa;
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-solid: #fff;
+  --input-bg: #ffffff;
+  --chip-bg: rgba(0, 0, 0, 0.04);
+  --chip-bg-hover: rgba(0, 0, 0, 0.06);
+  --grid-line: #e6e8f0;
+
+  /* 라운드/그림자 */
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow-1: 0 1px 2px rgba(45, 49, 66, 0.04), 0 4px 16px rgba(45, 49, 66, 0.06);
+  --shadow-2: 0 2px 4px rgba(45, 49, 66, 0.06), 0 12px 32px rgba(45, 49, 66, 0.1);
+  --shadow-pop: 0 10px 32px rgba(75, 99, 153, 0.22);
+
+  /* 모바일 안전 영역 / 탭바 높이 */
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tabbar-h: 68px;
+}
+
+/* 다크 테마 오버라이드 — html[data-theme="dark"] 가 토글된다 */
+html[data-theme='dark'] {
+  --income-soft: rgba(74, 127, 184, 0.2);
+  --expense-soft: rgba(225, 75, 106, 0.2);
+  --ink: #f1f2f6;
+  --ink-2: #bfc5d4;
+  --ink-3: #7f8699;
+  --line: #2c3040;
+  --bg: #14151f;
+  --surface: rgba(34, 36, 50, 0.85);
+  --surface-solid: #222432;
+  --input-bg: #2a2d3d;
+  --chip-bg: rgba(255, 255, 255, 0.05);
+  --chip-bg-hover: rgba(255, 255, 255, 0.08);
+  --grid-line: #2c3040;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.25), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-pop: 0 10px 32px rgba(0, 0, 0, 0.5);
+}

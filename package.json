@@ -1,0 +1,20 @@
+{
+  "name": "jjanfit",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "짠핏 (jjan Fit) — 수입/지출/운동 기록 앱",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.10"
+  }
+}

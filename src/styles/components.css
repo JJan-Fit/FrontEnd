@@ -1,0 +1,1314 @@
+/* =======================================================
+   짠핏 — 카드/위젯/뷰별 컴포넌트 스타일
+   (각 뷰의 마크업과 1:1로 대응. 변경 시 해당 컴포넌트와 함께 검토)
+   ======================================================= */
+
+/* 공용 카드 표면 — 글래스모피즘 */
+.card,
+.stat,
+.chart-wrap,
+.day-panel,
+.set-section,
+.cal-card {
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+}
+
+/* ============== 차트 뷰 ============== */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stat {
+  padding: 14px 12px;
+  text-align: left;
+}
+.stat .lbl {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.stat .val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  word-break: break-all;
+}
+.stat .val.in {
+  color: var(--income);
+}
+.stat .val.out {
+  color: var(--expense);
+}
+.stat .val.bal {
+  color: var(--ink);
+}
+
+.period-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 4px;
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow-1);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+.period-btn {
+  flex: 1;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  border-radius: 8px;
+  transition: 0.15s;
+}
+.period-btn.active {
+  background: var(--blue-2);
+  color: white;
+}
+
+.chart-wrap {
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.hdr-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.now-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.delta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.delta.up {
+  background: var(--income-soft);
+  color: var(--income);
+}
+.delta.down {
+  background: var(--expense-soft);
+  color: var(--expense);
+}
+.delta.flat {
+  background: #f0f2f7;
+  color: var(--ink-3);
+}
+.chart-wrap svg.balance-chart {
+  display: block;
+  width: 100%;
+  height: 220px;
+}
+.chart-wrap svg.vol-chart {
+  display: block;
+  width: 100%;
+  height: 60px;
+  margin-top: 2px;
+}
+.chart-dates {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--ink-3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+.chart-legend {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-top: 6px;
+}
+.chart-legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.chart-legend .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* 차트의 핀 고정된 선택 정보 */
+.chart-selected {
+  background: var(--chip-bg);
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.chart-selected.show {
+  display: flex;
+}
+.chart-selected .sel-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+}
+.chart-selected .sel-in,
+.chart-selected .sel-out {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+}
+.chart-selected .sel-in {
+  color: var(--income);
+}
+.chart-selected .sel-out {
+  color: var(--expense);
+}
+.chart-selected .sel-close {
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--chip-bg-hover);
+  color: var(--ink-3);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 섹션 헤더 */
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 4px 8px;
+}
+.section-title h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.muted {
+  color: var(--ink-3);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* 거래 내역 리스트 */
+.tx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tx {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+.tx .tag {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex: 0 0 auto;
+}
+.tx .tag.in {
+  background: var(--income-soft);
+  color: var(--income);
+}
+.tx .tag.out {
+  background: var(--expense-soft);
+  color: var(--expense);
+}
+.tx .tag.wo {
+  background: #eee5fa;
+  color: #7a5bbf;
+}
+.tx .info {
+  flex: 1;
+  min-width: 0;
+}
+.tx .info .t1 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tx .info .t2 {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tx .amt {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  flex: 0 0 auto;
+  text-align: right;
+}
+.tx .amt.in {
+  color: var(--income);
+}
+.tx .amt.out {
+  color: var(--expense);
+}
+.empty {
+  text-align: center;
+  padding: 36px 16px;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+.empty .emoji {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.tx .row-actions {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+.tx .row-actions button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--ink-3);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tx .row-actions button:hover {
+  background: var(--chip-bg-hover);
+  color: var(--ink);
+}
+.tx .row-actions .edit {
+  color: var(--blue-2);
+}
+.tx .row-actions .del {
+  color: var(--expense);
+}
+
+/* ============== 달력 뷰 ============== */
+.cal-mode {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 4px;
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow-1);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+.cal-mode-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-3);
+  border-radius: 8px;
+  transition: 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.cal-mode-btn.active {
+  background: var(--ink);
+  color: white;
+}
+.cal-mode-btn.active.money {
+  background: linear-gradient(135deg, var(--blue-2), #7a5bbf);
+}
+.cal-mode-btn.active.workout {
+  background: linear-gradient(135deg, #ffb4b4, #c7b3e8);
+}
+
+.cal-topcard {
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+.cal-topcard .label {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.cal-topcard .money-totals {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+.cal-topcard .money-totals .tt {
+  flex: 1;
+}
+.cal-topcard .money-totals .tt .t {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.cal-topcard .money-totals .tt .v {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.cal-topcard .money-totals .tt .v.in {
+  color: var(--income);
+}
+.cal-topcard .money-totals .tt .v.out {
+  color: var(--expense);
+}
+.cal-topcard .compare {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+.cal-topcard .compare .line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+.cal-topcard .compare .line .v {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+.cal-topcard .compare .up {
+  color: var(--income);
+}
+.cal-topcard .compare .down {
+  color: var(--expense);
+}
+.cal-topcard .wo-stats {
+  display: flex;
+  gap: 12px;
+}
+.cal-topcard .wo-stats .wtile {
+  flex: 1;
+}
+.cal-topcard .wo-stats .wtile .t {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.cal-topcard .wo-stats .wtile .v {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 2px;
+}
+.cal-topcard .wo-stats .wtile .sub {
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+
+.cal-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 4px 12px;
+}
+.cal-hdr .month {
+  font-family: 'Gaegu', cursive;
+  font-size: 22px;
+  color: var(--ink);
+}
+.cal-hdr .nav {
+  display: flex;
+  gap: 4px;
+}
+.cal-hdr .nav button {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: var(--ink-2);
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  transition: 0.15s;
+}
+.cal-hdr .nav button:hover {
+  background: var(--blue-2);
+  color: white;
+  border-color: var(--blue-2);
+}
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 6px;
+}
+.cal-weekdays span {
+  padding: 4px 0;
+}
+.cal-weekdays span:first-child {
+  color: var(--expense);
+}
+.cal-weekdays span:last-child {
+  color: var(--blue-2);
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  background: var(--surface);
+  padding: 8px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-1);
+}
+
+/* 머니 모드 셀 */
+.cal-grid.money .cell {
+  min-height: 72px;
+  padding: 6px 4px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  transition: 0.15s;
+  cursor: pointer;
+}
+.cal-grid.money .cell.other {
+  opacity: 0.3;
+}
+.cal-grid.money .cell.today {
+  background: linear-gradient(135deg, rgba(107, 155, 209, 0.18), rgba(200, 184, 224, 0.18));
+  border: 1.5px solid var(--blue-2);
+}
+.cal-grid.money .cell.selected {
+  background: var(--blue-2);
+  color: white;
+}
+.cal-grid.money .cell.selected .num {
+  color: white;
+}
+.cal-grid.money .cell:hover:not(.selected) {
+  background: rgba(107, 155, 209, 0.08);
+}
+.cal-grid.money .cell .num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-2);
+  line-height: 1;
+}
+.cal-grid.money .cell .amt-in {
+  font-size: 9px;
+  color: var(--income);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  margin-top: 4px;
+  line-height: 1.2;
+  word-break: break-all;
+}
+.cal-grid.money .cell .amt-out {
+  font-size: 9px;
+  color: var(--expense);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  line-height: 1.2;
+  word-break: break-all;
+}
+.cal-grid.money .cell.selected .amt-in {
+  color: #c7e4ff;
+}
+.cal-grid.money .cell.selected .amt-out {
+  color: #ffd0d8;
+}
+
+/* 운동 모드 셀 */
+.cal-grid.workout .cell {
+  min-height: 60px;
+  padding: 6px 3px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: 0.15s;
+  cursor: pointer;
+}
+.cal-grid.workout .cell.other {
+  opacity: 0.3;
+}
+.cal-grid.workout .cell.today {
+  background: linear-gradient(135deg, rgba(255, 180, 180, 0.25), rgba(199, 179, 232, 0.25));
+  border: 1.5px solid #c7b3e8;
+}
+.cal-grid.workout .cell.selected {
+  background: #7a5bbf;
+  color: white;
+}
+.cal-grid.workout .cell.selected .num {
+  color: white;
+}
+.cal-grid.workout .cell:hover:not(.selected) {
+  background: rgba(199, 179, 232, 0.12);
+}
+.cal-grid.workout .cell .num {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+  line-height: 1;
+  margin-top: 2px;
+}
+.cal-grid.workout .cell .wo-dots {
+  display: flex;
+  gap: 3px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cal-grid.workout .cell .wo-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.cal-grid.workout .cell .wo-more {
+  font-size: 8px;
+  color: var(--ink-3);
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+.cal-grid.workout .cell.selected .wo-more {
+  color: white;
+}
+
+/* 선택된 날짜 패널 */
+.day-panel {
+  margin-top: 16px;
+  padding: 18px 16px 14px;
+}
+.day-panel h3 {
+  margin: 0 0 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.day-panel h3 .dt {
+  font-family: 'Gaegu', cursive;
+  font-size: 20px;
+  color: var(--ink);
+}
+.day-panel h3 .dw {
+  font-size: 12px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.day-totals {
+  display: flex;
+  gap: 12px;
+  margin: 10px 0 14px;
+}
+.day-totals .t {
+  flex: 1;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
+.day-totals .t .lbl {
+  font-size: 10px;
+  color: var(--ink-3);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.day-totals .t .v {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+.day-totals .t.in .v {
+  color: var(--income);
+}
+.day-totals .t.out .v {
+  color: var(--expense);
+}
+.day-actions {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.action-btn {
+  flex: 1;
+  padding: 11px 6px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: 0.15s;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.action-btn.in {
+  background: var(--income-soft);
+  color: var(--income);
+}
+.action-btn.out {
+  background: var(--expense-soft);
+  color: var(--expense);
+}
+.action-btn.wo {
+  background: #eee5fa;
+  color: #7a5bbf;
+}
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(45, 49, 66, 0.08);
+}
+
+/* ============== 운동 뷰 ============== */
+.wo-hero {
+  padding: 18px;
+  background: linear-gradient(135deg, #fff6e9 0%, #eee5fa 100%);
+  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-1);
+}
+html[data-theme='dark'] .wo-hero {
+  background: linear-gradient(135deg, #2a2740 0%, #3b2e4a 100%);
+}
+.wo-hero .h-title {
+  font-family: 'Gaegu', cursive;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+.wo-hero .h-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.wo-hero .h-big {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: #7a5bbf;
+  margin: 10px 0 2px;
+  letter-spacing: -0.02em;
+}
+html[data-theme='dark'] .wo-hero .h-big {
+  color: #c8b8e0;
+}
+.wo-hero .h-mini {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+/* 몸무게 트래커 카드 */
+.weight-card {
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.weight-card .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.weight-card .top h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.weight-card .top .stat-now {
+  text-align: right;
+}
+.weight-card .top .stat-now .lbl {
+  font-size: 10px;
+  color: var(--ink-3);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.weight-card .top .stat-now .val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+}
+.weight-card .top .stat-now .delta {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 2px;
+}
+.weight-card .top .stat-now .delta.up {
+  color: var(--expense);
+}
+.weight-card .top .stat-now .delta.down {
+  color: var(--income);
+}
+.weight-card .input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.weight-card .input-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  font-size: 14px;
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+.weight-card .input-row input:focus {
+  border-color: #7a5bbf;
+}
+.weight-card .input-row .unit {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+  font-weight: 700;
+}
+.weight-card .input-row button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #7a5bbf;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+.weight-card svg.weight-chart {
+  display: block;
+  width: 100%;
+  height: 120px;
+}
+.weight-card .weight-date-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--ink-3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+.weight-card .empty-small {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.wo-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 14px;
+  padding: 2px;
+  scrollbar-width: none;
+}
+.wo-chips::-webkit-scrollbar {
+  display: none;
+}
+.wo-chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-1);
+  transition: 0.15s;
+  flex: 0 0 auto;
+}
+.wo-chip .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.wo-chip.active {
+  background: var(--ink);
+  color: white;
+}
+
+.ex-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.ex-card {
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-1);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: 0.15s;
+  min-height: 82px;
+}
+.ex-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+.ex-card .cat {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 5px;
+  display: inline-block;
+  align-self: flex-start;
+}
+.ex-card .nm {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+}
+.ex-card .stat {
+  font-size: 10px;
+  color: var(--ink-3);
+  font-family: 'JetBrains Mono', monospace;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-top: auto;
+}
+
+/* 검색창 */
+.search-row {
+  position: relative;
+  margin-bottom: 10px;
+}
+.search-row input {
+  width: 100%;
+  padding: 12px 36px 12px 38px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  font-size: 14px;
+  color: var(--ink);
+}
+.search-row input:focus {
+  border-color: var(--blue-2);
+}
+.search-row::before {
+  content: '🔍';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0.6;
+}
+.search-row .clearBtn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: var(--ink-3);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.search-row .clearBtn.show {
+  display: flex;
+}
+
+/* 세션(운동 기록) 카드 */
+.sess {
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 14px;
+  box-shadow: var(--shadow-1);
+  margin-bottom: 8px;
+}
+.sess .hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+.sess .hdr .tt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.sess .hdr .tt .cat-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.sess .hdr .tt .nm {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sess .hdr .time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.sess .sets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.sess .sets .chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  background: var(--chip-bg);
+  border-radius: 6px;
+  color: var(--ink-2);
+}
+.sess .row-actions {
+  display: flex;
+  gap: 6px;
+}
+.sess .row-actions button {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 8px;
+}
+.sess .row-actions .edit {
+  background: var(--income-soft);
+  color: var(--income);
+}
+.sess .row-actions .del {
+  background: var(--expense-soft);
+  color: var(--expense);
+}
+
+/* ============== 설정 뷰 ============== */
+.set-section {
+  margin-bottom: 14px;
+  padding: 16px;
+}
+.set-section .hdr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.set-section .hdr-row h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.set-section .em {
+  font-size: 16px;
+}
+.set-section .list .item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.set-section .list .item:last-child {
+  border-bottom: none;
+}
+.set-section .list .item.sub {
+  padding-left: 24px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.set-section .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.set-section .nm {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+}
+.set-section .item-actions {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+.set-section .item-actions button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--ink-3);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.set-section .item-actions button:hover {
+  background: var(--chip-bg-hover);
+}
+.set-section .item-actions .edit {
+  color: var(--blue-2);
+}
+.set-section .item-actions .del {
+  color: var(--expense);
+}
+
+.set-section .add-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+.set-section .add-row input {
+  flex: 1;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  font-size: 13px;
+  color: var(--ink);
+}
+.set-section .add-row button {
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: var(--blue-2);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 색상 커스터마이저 */
+.color-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.color-row:last-of-type {
+  border-bottom: none;
+}
+.color-row .nm {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.color-row input[type='color'] {
+  width: 44px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+}
+.color-row .hex {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-3);
+  min-width: 64px;
+}
+.color-row .restore {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 8px;
+  background: var(--chip-bg);
+  color: var(--ink-2);
+}
+
+.danger-btn {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  width: 100%;
+  background: var(--expense-soft);
+  color: var(--expense);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* 모달 안의 종류 칩 */
+.type-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.type-chip {
+  padding: 8px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--chip-bg);
+  color: var(--ink-2);
+  transition: 0.15s;
+}
+.type-chip.active {
+  background: var(--ink);
+  color: white;
+}
+.type-chip.add-chip {
+  border: 1.5px dashed var(--line);
+  background: transparent;
+  color: var(--ink-3);
+}
+
+/* 세션 모달 (세트 편집) */
+.set-hdr {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 32px;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 2px 6px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+.set-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 32px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.set-row .sn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue-2);
+  padding: 0 6px;
+}
+.set-row input {
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+}
+.set-row input:focus {
+  border-color: var(--blue-2);
+}
+.set-row .x {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--ink-3);
+  opacity: 0.5;
+  transition: 0.15s;
+}
+.set-row .x:hover {
+  opacity: 1;
+  background: var(--expense-soft);
+  color: var(--expense);
+}
+.add-set {
+  width: 100%;
+  padding: 11px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue-2);
+  background: var(--income-soft);
+  border: 1.5px dashed rgba(74, 127, 184, 0.4);
+  margin-top: 4px;
+}
+
+/* 헤더에 쓰는 작은 카테고리 라벨 */
+.cat-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
