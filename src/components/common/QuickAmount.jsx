@@ -9,7 +9,8 @@
  *   presets?: number[],            // 기본 [1000, 5000, 10000, 50000, 100000]
  * }} props
  */
-const DEFAULT_PRESETS = [1000, 5000, 10000, 50000, 100000];
+// 큰 금액이 왼쪽에 오도록 내림차순 정렬 — 자주 누르는 큰 단위가 엄지에 가장 가깝게
+const DEFAULT_PRESETS = [100000, 50000, 10000, 5000, 1000];
 
 export default function QuickAmount({ onAdd, onClear, presets = DEFAULT_PRESETS }) {
   return (
