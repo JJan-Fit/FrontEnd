@@ -341,6 +341,181 @@ html[data-theme='dark'] .cat-color-swatch {
   transform: none !important;
 }
 
+/* =======================================================
+   Workout Picker — 2단계 운동 선택 모달 전용
+   ======================================================= */
+
+/* Step 1 단계 라벨 */
+.picker-step-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  text-transform: none;
+  padding: 0 2px;
+}
+
+/* 카테고리 선택 그리드 */
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* 카테고리 카드 — 큼직하게, 색상 강조바 + 이모지 + 이름 + 메타 */
+.cat-card {
+  --cat-color: var(--blue-2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px 14px;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  box-shadow: var(--shadow-1);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.cat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-2);
+  border-color: var(--cat-color);
+}
+.cat-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* 좌측 색상 바 — 카테고리 색상 강조 */
+.cat-card .cat-color-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--cat-color);
+}
+
+.cat-card .cat-emoji {
+  font-size: 22px;
+  line-height: 1;
+}
+.cat-card .cat-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.cat-card .cat-meta {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* "+ 새 Type 추가" 카드 — 점선 테두리 */
+.cat-card.add {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--line);
+  box-shadow: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--ink-3);
+}
+.cat-card.add .cat-name {
+  color: var(--ink-2);
+}
+.cat-card.add:hover {
+  border-color: var(--blue-2);
+  background: rgba(74, 127, 184, 0.06);
+  color: var(--blue-2);
+}
+.cat-card.add::before {
+  display: none;
+}
+
+/* 운동 단계 헤더 (← 뒤로 + 카테고리 이름 + 날짜) */
+.picker-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -2px 0 14px;
+  padding: 6px 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+.picker-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--chip-bg);
+  color: var(--ink-2);
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.picker-back:hover {
+  background: var(--blue-2);
+  color: white;
+  transform: translateX(-2px);
+}
+
+.picker-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.picker-cat-pill {
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  color: var(--ink);
+}
+.picker-step-sub {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* 검색 결과 없을 때 "검색어로 추가" 빠른 버튼 */
+.quick-add-from-search {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--blue-2);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 14px rgba(74, 127, 184, 0.25);
+}
+.quick-add-from-search:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(74, 127, 184, 0.35);
+}
+.quick-add-from-search:active {
+  transform: scale(0.97);
+}
+
 /* ---------- 작은 화면 대응 ---------- */
 @media (max-width: 360px) {
   .quick-chip {
@@ -355,5 +530,11 @@ html[data-theme='dark'] .cat-color-swatch {
   }
   .stepper-btn {
     font-size: 16px;
+  }
+  .cat-card {
+    padding: 14px 12px;
+  }
+  .cat-card .cat-name {
+    font-size: 15px;
   }
 }
