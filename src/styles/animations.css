@@ -53,12 +53,57 @@
   }
 }
 
-@keyframes ring-pulse {
+/*
+   오늘 날짜 셀 — 살짝 호흡하는 듯 무한 반복되는 펄스.
+   모드별로 색을 다르게 줘서 머니(파랑) / 운동(보라) 분위기와 맞춘다.
+   70% 시점까지 빛이 퍼지며 사라지고, 100%까지 30% 구간은 잔잔히 쉬어간다.
+*/
+@keyframes ring-pulse-money {
   0% {
-    box-shadow: 0 0 0 0 rgba(74, 127, 184, 0.45);
+    box-shadow:
+      0 0 0 0 rgba(74, 127, 184, 0.55),
+      0 0 0 0 rgba(74, 127, 184, 0.4);
+  }
+  70% {
+    box-shadow:
+      0 0 0 12px rgba(74, 127, 184, 0),
+      0 0 0 6px rgba(74, 127, 184, 0);
   }
   100% {
-    box-shadow: 0 0 0 14px rgba(74, 127, 184, 0);
+    box-shadow:
+      0 0 0 0 rgba(74, 127, 184, 0),
+      0 0 0 0 rgba(74, 127, 184, 0);
+  }
+}
+
+@keyframes ring-pulse-workout {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(199, 179, 232, 0.6),
+      0 0 0 0 rgba(255, 180, 180, 0.45);
+  }
+  70% {
+    box-shadow:
+      0 0 0 12px rgba(199, 179, 232, 0),
+      0 0 0 6px rgba(255, 180, 180, 0);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(199, 179, 232, 0),
+      0 0 0 0 rgba(255, 180, 180, 0);
+  }
+}
+
+/* 헤더의 "● 오늘" 버튼도 살짝 깜빡이도록 */
+@keyframes today-dot-blink {
+  0%,
+  100% {
+    color: var(--blue-2);
+    transform: scale(1);
+  }
+  50% {
+    color: var(--ink-3);
+    transform: scale(0.85);
   }
 }
 
@@ -281,8 +326,30 @@ button:focus-visible {
 .cal-grid .cell.selected {
   animation: pop-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.cal-grid .cell.today {
-  animation: ring-pulse 1.6s ease-out 1;
+
+/*
+   today 셀 펄스 — 모드별 색상.
+   사용자가 페이지를 보고 있는 동안 "오늘 여기예요" 라는 신호가
+   계속 시각적으로 반복되어 한 눈에 들어오도록 한다.
+*/
+.cal-grid.money .cell.today {
+  animation: ring-pulse-money 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.cal-grid.workout .cell.today {
+  animation: ring-pulse-workout 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* 선택된 + 오늘 인 경우 — 펄스가 가려지지 않도록 z-index 만 살짝 올려줌 */
+.cal-grid .cell.today.selected {
+  z-index: 2;
+}
+
+/* 헤더의 "오늘로 이동" 점 버튼도 동일한 호흡으로 깜빡 */
+.cal-hdr .nav button[title='오늘'] {
+  animation: today-dot-blink 2.4s ease-in-out infinite;
+}
+.cal-hdr .nav button[title='오늘']:hover {
+  animation-play-state: paused;
 }
 
 /* 월 이동 버튼 */
