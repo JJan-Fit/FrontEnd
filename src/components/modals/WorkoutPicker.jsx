@@ -63,15 +63,12 @@ export default function WorkoutPicker({ defaultDate }) {
     if (!nm) return;
     // 새 카테고리 색상은 팔레트에서 차례로 (현재 카테고리 개수에 따라)
     const color = WORKOUT_PALETTE[state.workoutCats.length % WORKOUT_PALETTE.length];
-    actions.addWorkoutCat(nm, color);
+    const newId = actions.addWorkoutCat(nm, color);
     toast(`"${nm}" 추가됨`);
     setShowAddCat(false);
     setNewCatName('');
-    // 새로 만든 카테고리를 바로 선택 단계로 — id 는 actions 안에서 만들어지지만
-    // workoutCats 의 마지막에 추가되므로 length-1 위치로 찾는 대신
-    // 한 틱 뒤에 그 카테고리 id 를 알아내기 위해 effect 대신 여기서는
-    // "추가만" 하고 사용자에게 직접 카드를 누르게 한다.
-    // (검색·확인 단계가 한번 더 들어가는 게 오히려 자연스러움)
+    // 추가한 카테고리로 바로 진입 — 종목까지 이어서 추가/선택 가능
+    if (newId) enterCategory(newId);
   };
 
   /* ---------- 운동(종목) ---------- */

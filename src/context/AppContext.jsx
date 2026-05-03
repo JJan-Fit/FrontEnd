@@ -92,12 +92,19 @@ export function AppProvider({ children }) {
 
   /* ---------- 운동 카테고리 / 종목 ---------- */
 
+  /**
+   * 새 카테고리를 추가하고 그 id 를 반환한다.
+   * 호출자가 "추가 직후 그 카테고리로 이동" 같은 흐름을 만들 수 있도록 동기적으로 id 를 알려준다.
+   * (setState 는 비동기이지만 id 자체는 호출 시점에 결정되므로 즉시 리턴 가능)
+   */
   const addWorkoutCat = useCallback(
     (name, color) => {
+      const id = uid('wc_');
       setState((s) => ({
         ...s,
-        workoutCats: [...s.workoutCats, { id: uid('wc_'), name, color, exercises: [] }],
+        workoutCats: [...s.workoutCats, { id, name, color, exercises: [] }],
       }));
+      return id;
     },
     [setState]
   );
@@ -135,16 +142,17 @@ export function AppProvider({ children }) {
     [setState]
   );
 
+  /** 종목을 추가하고 새 id 를 반환 — 추가 직후 그 종목을 강조하거나 선택할 때 사용 */
   const addExercise = useCallback(
     (catId, name) => {
+      const id = uid('ex_');
       setState((s) => ({
         ...s,
         workoutCats: s.workoutCats.map((c) =>
-          c.id === catId
-            ? { ...c, exercises: [...c.exercises, { id: uid('ex_'), name }] }
-            : c
+          c.id === catId ? { ...c, exercises: [...c.exercises, { id, name }] } : c
         ),
       }));
+      return id;
     },
     [setState]
   );

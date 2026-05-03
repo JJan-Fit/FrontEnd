@@ -109,7 +109,9 @@ export default function WorkoutView() {
         cat={cat}
         exercises={exercises}
         records={state.records}
+        searchQuery={search}
         onPick={startSession}
+        onClearSearch={() => setSearch('')}
       />
 
       <SectionTitle title="오늘의 세션" hint={`${sortedToday.length}개`} />

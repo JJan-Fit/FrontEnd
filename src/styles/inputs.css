@@ -516,6 +516,82 @@ html[data-theme='dark'] .cat-color-swatch {
   transform: scale(0.97);
 }
 
+/* =======================================================
+   Workout View — 카테고리 칩 / 종목 그리드의 즉석 추가 UI
+   ======================================================= */
+
+/* 칩 행을 감싸는 래퍼 — 인라인 입력 폼이 칩 줄 아래에 자연스럽게 위치하도록 */
+.wo-chips-wrap {
+  margin-bottom: 14px;
+}
+.wo-chips-wrap .wo-chips {
+  margin-bottom: 0;
+}
+
+/* "+ Type" 칩 — 점선 테두리로 추가 동작임을 시각적으로 구분 */
+.wo-chip.add {
+  background: transparent;
+  border: 1.5px dashed var(--line);
+  color: var(--ink-3);
+  box-shadow: none;
+  font-weight: 600;
+}
+.wo-chip.add:hover {
+  background: rgba(74, 127, 184, 0.08);
+  border-color: var(--blue-2);
+  color: var(--blue-2);
+  transform: translateY(-1px);
+}
+
+/* 종목 그리드를 감싸는 래퍼 — 그리드 + 인라인 추가 폼을 한 영역으로 묶음 */
+.ex-grid-wrap {
+  margin-bottom: 14px;
+}
+.ex-grid-wrap .ex-grid {
+  margin-bottom: 0;
+}
+
+/* 그리드 안의 "+ 새 종목 추가" 카드 — 점선 테두리로 일반 카드와 구분 */
+.ex-card.ex-card-add {
+  background: transparent;
+  border: 1.5px dashed var(--line);
+  box-shadow: none;
+  color: var(--ink-3);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.ex-card.ex-card-add .ex-card-add-icon {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-3);
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+.ex-card.ex-card-add .nm {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.ex-card.ex-card-add .stat {
+  color: var(--ink-3);
+}
+.ex-card.ex-card-add:hover {
+  background: rgba(122, 91, 191, 0.06);
+  border-color: #7a5bbf;
+  border-style: solid;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+.ex-card.ex-card-add:hover .ex-card-add-icon {
+  color: #7a5bbf;
+  transform: scale(1.1);
+}
+.ex-card.ex-card-add:hover .nm {
+  color: var(--ink);
+}
+
 /* ---------- 작은 화면 대응 ---------- */
 @media (max-width: 360px) {
   .quick-chip {
