@@ -528,6 +528,32 @@ html[data-theme='dark'] .cat-color-swatch {
   margin-bottom: 0;
 }
 
+/* 활성 칩 안의 ✕ 버튼 — "이 카테고리 삭제" */
+.wo-chip-del {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.wo-chip-del:hover {
+  background: var(--expense);
+  color: white;
+  transform: scale(1.12);
+}
+.wo-chip-del:active {
+  transform: scale(0.92);
+}
+
 /* "+ Type" 칩 — 점선 테두리로 추가 동작임을 시각적으로 구분 */
 .wo-chip.add {
   background: transparent;
@@ -550,6 +576,65 @@ html[data-theme='dark'] .cat-color-swatch {
 .ex-grid-wrap .ex-grid {
   margin-bottom: 0;
 }
+
+/*
+   종목 카드 우상단 ✕ — 카드 클릭(세션 시작)과 영역을 분리.
+   기본은 살짝 흐릿하게, 카드 hover 시 또는 ✕ hover 시에 또렷해진다.
+*/
+.ex-card {
+  position: relative;
+}
+.ex-card-del {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--chip-bg);
+  color: var(--ink-3);
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  opacity: 0; /* 기본 숨김 — 카드 hover 시에만 표시 */
+  transform: scale(0.85);
+  transition:
+    opacity 0.18s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+  z-index: 2;
+}
+.ex-card:hover .ex-card-del,
+.ex-card:focus-within .ex-card-del {
+  opacity: 1;
+  transform: scale(1);
+}
+.ex-card-del:hover {
+  background: var(--expense);
+  color: white;
+  transform: scale(1.12);
+}
+.ex-card-del:active {
+  transform: scale(0.92);
+}
+/* 모바일 (hover 가 없는 환경) — 항상 살짝 보이게 노출 */
+@media (hover: none) {
+  .ex-card-del {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  .ex-card-del:active {
+    opacity: 1;
+    background: var(--expense);
+    color: white;
+  }
+}
+/* 추가 카드(.ex-card-add)에는 ✕ 가 없으므로 별도 처리 불필요 */
 
 /* 그리드 안의 "+ 새 종목 추가" 카드 — 점선 테두리로 일반 카드와 구분 */
 .ex-card.ex-card-add {

@@ -64,6 +64,24 @@ export default function ExerciseGrid({
     if (onClearSearch) onClearSearch();
   };
 
+  /* ---------- 종목 삭제 ---------- */
+  const handleDeleteExercise = (e, ex) => {
+    e.stopPropagation(); // 부모 카드의 onPick 호출 막기
+
+    // 이 종목으로 기록된 세션 수를 안내해 사용자가 신중히 결정하도록
+    const sessionCount = (records || []).filter(
+      (r) => r.kind === 'workout' && r.exerciseId === ex.id
+    ).length;
+    const lines = [`"${ex.name}" 종목을 삭제할까요?`];
+    if (sessionCount > 0) {
+      lines.push(`기존 운동 기록 ${sessionCount}개는 그대로 남습니다 (이름만 빠짐).`);
+    }
+    if (!confirm(lines.join('\n'))) return;
+
+    actions.deleteExercise(cat.id, ex.id);
+    toast('종목 삭제됨');
+  };
+
   const ql = searchQuery.trim();
   const showSearchAdd = exercises.length === 0 && !!ql;
 
@@ -109,6 +127,23 @@ export default function ExerciseGrid({
                 className="ex-card"
                 onClick={() => onPick(cat.id, e.id)}
               >
+                {/* 카드 우상단 ✕ — 카드 클릭(=세션 시작)과 분리된 영역 */}
+                <span
+                  role="button"
+                  tabIndex={0}
+                  className="ex-card-del"
+                  aria-label={`${e.name} 삭제`}
+                  title="이 종목 삭제"
+                  onClick={(ev) => handleDeleteExercise(ev, e)}
+                  onKeyDown={(ev) => {
+                    if (ev.key === 'Enter' || ev.key === ' ') {
+                      ev.preventDefault();
+                      handleDeleteExercise(ev, e);
+                    }
+                  }}
+                >
+                  ×
+                </span>
                 <span
                   className="cat"
                   style={{ background: cat.color, color: 'var(--ink)' }}
