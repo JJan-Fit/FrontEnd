@@ -46,7 +46,13 @@ export default function WeightChart({ pts }) {
 
   return (
     <>
-      <svg className="weight-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+      {/* key 에 점 개수 + 마지막 값 포함 — 새 데이터가 추가되면 라인이 다시 그려짐 */}
+      <svg
+        key={`weight-${pts.length}-${pts[pts.length - 1].v}`}
+        className="weight-chart"
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="none"
+      >
         <defs>
           <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#7A5BBF" stopOpacity={0.28} />

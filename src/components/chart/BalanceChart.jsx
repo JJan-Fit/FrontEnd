@@ -136,8 +136,15 @@ export default function BalanceChart({
       outColor={outColor}
       startEndDates={startEndDates}
     >
-      {/* ---- 누적 라인 차트 ---- */}
-      <svg className="balance-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+      {/* ---- 누적 라인 차트 ----
+          key 에 series 길이/마지막 날짜를 포함시켜 데이터/기간이 바뀔 때마다
+          SVG 가 새로 마운트되며 라인 드로잉 애니메이션이 다시 재생되도록 한다. */}
+      <svg
+        key={`bal-${rangeDays}-${series.length}-${series[series.length - 1].date}`}
+        className="balance-chart"
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="none"
+      >
         <defs>
           <linearGradient id={gInId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={inColor} stopOpacity={0.28} />
@@ -284,10 +291,17 @@ export default function BalanceChart({
         })}
       </svg>
 
-      {/* ---- 거래량 막대 ---- */}
-      <svg className="vol-chart" viewBox={`0 0 ${VW} ${VH}`} preserveAspectRatio="none">
+      {/* ---- 거래량 막대 — 데이터/기간 변경 시 다시 솟아오르도록 key 부여 ---- */}
+      <svg
+        key={`vol-${rangeDays}-${series.length}-${series[series.length - 1].date}`}
+        className="vol-chart"
+        viewBox={`0 0 ${VW} ${VH}`}
+        preserveAspectRatio="none"
+      >
         {series.map((s, i) => {
           const cx = xv(i);
+          // 막대마다 살짝 다른 지연 — 좌→우 흐름이 느껴지도록
+          const delay = `${(i / series.length) * 0.4}s`;
           return (
             <g key={i}>
               {s.in > 0 && (
@@ -298,6 +312,7 @@ export default function BalanceChart({
                   height={(s.in / maxVol) * (VH * 0.9)}
                   fill={inColor}
                   rx={1.5}
+                  style={{ animationDelay: delay }}
                 />
               )}
               {s.out > 0 && (
@@ -308,6 +323,7 @@ export default function BalanceChart({
                   height={(s.out / maxVol) * (VH * 0.9)}
                   fill={outColor}
                   rx={1.5}
+                  style={{ animationDelay: delay }}
                 />
               )}
             </g>

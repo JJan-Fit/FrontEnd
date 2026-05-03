@@ -1,0 +1,428 @@
+/* =======================================================
+   짠핏 — 애니메이션 / 마이크로 인터랙션 레이어
+   - 키프레임 정의 + 재사용 가능한 애니메이션 클래스
+   - 기존 컴포넌트 파일을 건드리지 않고 hover/transition 강화
+   ======================================================= */
+
+/* ---------- 키프레임 ---------- */
+@keyframes view-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-tab {
+  0% {
+    transform: scale(0.85);
+  }
+  55% {
+    transform: scale(1.22);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes ring-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 127, 184, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(74, 127, 184, 0);
+  }
+}
+
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes toast-in {
+  0% {
+    transform: translateX(-50%) translateY(-80px) scale(0.92);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-50%) translateY(4px) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes modal-card-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* =======================================================
+   탭 전환 — 각 view 가 active 가 되는 순간 부드럽게 페이드 업
+   ======================================================= */
+.view.active {
+  animation: view-fade-in 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =======================================================
+   공통 인터랙션 (hover / active / focus-visible)
+   - 모든 버튼/카드에 일괄 적용
+   ======================================================= */
+
+/* 모든 버튼에 부드러운 트랜지션 + 살짝 눌리는 효과 */
+button {
+  transition:
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    opacity 0.18s ease;
+}
+button:not(:disabled):active {
+  transform: scale(0.96);
+}
+
+/* 키보드 포커스 — 마우스 사용자에게는 보이지 않음 */
+button:focus-visible {
+  outline: 2px solid var(--blue-2);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ---------- 거래 / 운동 행 ---------- */
+.tx,
+.sess,
+.stat,
+.chart-wrap,
+.cal-card,
+.day-panel,
+.set-section,
+.weight-card,
+.wo-hero {
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease;
+}
+.tx:hover,
+.sess:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+/* 운동 종목 카드 — 살짝 살아나는 듯한 hover */
+.ex-card {
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+.ex-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: var(--shadow-2);
+  border-color: rgba(122, 91, 191, 0.35);
+}
+.ex-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* ---------- 기간/모드 칩 ---------- */
+.period-btn,
+.cal-mode-btn,
+.wo-chip,
+.type-chip {
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.period-btn:hover:not(.active),
+.cal-mode-btn:hover:not(.active),
+.type-chip:hover:not(.active),
+.wo-chip:hover:not(.active) {
+  background: var(--chip-bg-hover);
+  color: var(--ink);
+}
+.wo-chip:hover:not(.active) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+/* ---------- 액션 버튼 (수입/지출/운동) ---------- */
+.action-btn {
+  transition:
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+.action-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow: 0 8px 18px rgba(45, 49, 66, 0.12);
+}
+.action-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ---------- Primary 버튼 (모달 저장 등) ---------- */
+.primary-btn {
+  position: relative;
+  overflow: hidden;
+}
+.primary-btn::after {
+  /* hover 시 위에서 아래로 흐르는 빛 효과 */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  background-position: -200% 0;
+  pointer-events: none;
+  transition: background-position 0.6s ease;
+}
+.primary-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-pop);
+}
+.primary-btn:not(:disabled):hover::after {
+  background-position: 200% 0;
+}
+
+/* ---------- 보조 버튼 ---------- */
+.secondary-btn:hover {
+  background: var(--chip-bg-hover);
+  color: var(--ink);
+}
+
+/* ---------- 작은 인풋 추가 버튼들 (설정 등) ---------- */
+.set-section .add-row button:hover,
+.weight-card .input-row button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+/* 위험 버튼 */
+.danger-btn {
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.danger-btn:hover {
+  background: var(--expense);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(225, 75, 106, 0.35);
+}
+
+/* ---------- 달력 셀 ---------- */
+.cal-grid .cell {
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.cal-grid .cell:not(.other):not(.selected):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(45, 49, 66, 0.1);
+  z-index: 1;
+}
+.cal-grid .cell.selected {
+  animation: pop-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cal-grid .cell.today {
+  animation: ring-pulse 1.6s ease-out 1;
+}
+
+/* 월 이동 버튼 */
+.cal-hdr .nav button:hover {
+  transform: translateY(-1px);
+}
+.cal-hdr .nav button:active {
+  transform: translateY(0) scale(0.94);
+}
+
+/* ---------- 탭바 ---------- */
+.tab-btn:hover:not(.active) {
+  color: var(--ink-2);
+}
+.tab-btn:hover:not(.active) .ic {
+  transform: translateY(-2px);
+}
+.tab-btn .ic {
+  transition: transform 0.2s ease;
+}
+.tab-btn.active .ic {
+  animation: bounce-tab 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- 헤더 / 테마 토글 ---------- */
+.theme-toggle {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+.theme-toggle:hover {
+  transform: rotate(360deg) scale(1.06);
+}
+
+.hdr .logo img {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hdr .logo img:hover {
+  transform: scale(1.08) rotate(-6deg);
+}
+
+/* ---------- 차트 ---------- */
+/* 누적 라인 — stroke-dasharray 로 그려지는 효과
+   path 의 path-length 는 일반적으로 1000~2000 사이라 충분한 큰 값으로 설정 */
+.balance-chart path[stroke-linecap='round'] {
+  stroke-dasharray: 1500;
+  stroke-dashoffset: 1500;
+  animation: draw-line 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.weight-chart path[stroke-linecap='round'] {
+  stroke-dasharray: 1500;
+  stroke-dashoffset: 1500;
+  animation: draw-line 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* 차트 점 — 부드럽게 등장 */
+.balance-chart circle,
+.weight-chart circle {
+  animation: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: 0.6s;
+}
+
+/* 거래량 막대 — 아래에서 위로 자라남 */
+.vol-chart rect {
+  transform-origin: bottom;
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: 0.4s;
+}
+
+/* 차트 hover 시 점이 커짐 */
+.balance-chart rect[data-hit] {
+  cursor: pointer;
+}
+
+/* ---------- 모달 ---------- */
+.modal-root.show .modal-card {
+  animation: modal-card-up 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 모달 안 폼 요소들이 차례로 등장 */
+.modal-root.show .modal-card > * {
+  animation: fade-up 0.36s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.modal-root.show .modal-card > *:nth-child(1) { animation-delay: 0.04s; }
+.modal-root.show .modal-card > *:nth-child(2) { animation-delay: 0.08s; }
+.modal-root.show .modal-card > *:nth-child(3) { animation-delay: 0.12s; }
+.modal-root.show .modal-card > *:nth-child(4) { animation-delay: 0.16s; }
+.modal-root.show .modal-card > *:nth-child(5) { animation-delay: 0.2s; }
+.modal-root.show .modal-card > *:nth-child(6) { animation-delay: 0.24s; }
+
+/* ---------- 토스트 ---------- */
+.toast.show {
+  animation: toast-in 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- 차트/거래 리스트 마운트 ---------- */
+.tx-list .tx,
+.day-panel .tx {
+  animation: fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.tx-list .tx:nth-child(1) { animation-delay: 0.02s; }
+.tx-list .tx:nth-child(2) { animation-delay: 0.06s; }
+.tx-list .tx:nth-child(3) { animation-delay: 0.1s; }
+.tx-list .tx:nth-child(4) { animation-delay: 0.14s; }
+.tx-list .tx:nth-child(5) { animation-delay: 0.18s; }
+.tx-list .tx:nth-child(6) { animation-delay: 0.22s; }
+.tx-list .tx:nth-child(7) { animation-delay: 0.26s; }
+.tx-list .tx:nth-child(8) { animation-delay: 0.3s; }
+.tx-list .tx:nth-child(9) { animation-delay: 0.34s; }
+.tx-list .tx:nth-child(10) { animation-delay: 0.38s; }
+
+.summary-grid .stat {
+  animation: fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.summary-grid .stat:nth-child(1) { animation-delay: 0.05s; }
+.summary-grid .stat:nth-child(2) { animation-delay: 0.1s; }
+.summary-grid .stat:nth-child(3) { animation-delay: 0.15s; }
+
+/* ---------- 입력 필드 포커스 ---------- */
+input,
+textarea {
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(74, 127, 184, 0.16);
+}
+
+/* ---------- 사용자가 모션 감소를 요청한 경우 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.05ms !important;
+    scroll-behavior: auto !important;
+  }
+}

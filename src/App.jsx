@@ -22,17 +22,16 @@ export default function App() {
       <Header />
 
       <main className="main">
-        {/* 각 뷰는 active 클래스로 표시/숨김 — 원본 동작과 동일하게 모두 마운트해 두어 탭 전환이 빠르게 일어나도록 함 */}
-        <section className={`view ${activeView === 'chart' ? 'active' : ''}`}>
+        {/*
+          탭 전환 시 부드러운 페이드 업 애니메이션을 매번 재생하기 위해
+          활성 뷰만 단일 <section> 으로 마운트한다 (key 변경 → 애니메이션 재시작).
+          비활성 뷰의 상태는 보존되지 않지만, 탭 전환은 충분히 빠르고
+          데이터 자체는 AppContext 에 있어 데이터 손실은 없다.
+        */}
+        <section key={activeView} className="view active">
           {activeView === 'chart' && <ChartView />}
-        </section>
-        <section className={`view ${activeView === 'cal' ? 'active' : ''}`}>
           {activeView === 'cal' && <CalendarView />}
-        </section>
-        <section className={`view ${activeView === 'workout' ? 'active' : ''}`}>
           {activeView === 'workout' && <WorkoutView />}
-        </section>
-        <section className={`view ${activeView === 'set' ? 'active' : ''}`}>
           {activeView === 'set' && <SettingsView />}
         </section>
       </main>
